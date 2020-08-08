@@ -1,0 +1,140 @@
+[
+    {
+        "id": "426451d9.00463",
+        "type": "tab",
+        "label": "Save measurement data",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "23ccd6ef.09d65a",
+        "type": "influxdb out",
+        "z": "426451d9.00463",
+        "influxdb": "cd2a13a.0b477f",
+        "name": "Save data",
+        "measurement": "sonoff",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 420,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "8d6a4eb2.b8418",
+        "type": "mqtt in",
+        "z": "426451d9.00463",
+        "name": "Receive data",
+        "topic": "tele/tasmota/SENSOR",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7fba0013.7a55e",
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "4cef9a26.6cf844",
+                "559c049e.6877ec"
+            ]
+        ]
+    },
+    {
+        "id": "4cef9a26.6cf844",
+        "type": "debug",
+        "z": "426451d9.00463",
+        "name": "JSON string",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 290,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "559c049e.6877ec",
+        "type": "function",
+        "z": "426451d9.00463",
+        "name": "parse",
+        "func": "msg.payload = JSON.parse(msg.payload).ENERGY;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 270,
+        "y": 180,
+        "wires": [
+            [
+                "ef29afe0.1447a",
+                "23ccd6ef.09d65a"
+            ]
+        ]
+    },
+    {
+        "id": "ef29afe0.1447a",
+        "type": "debug",
+        "z": "426451d9.00463",
+        "name": "Influx input debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 450,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "c88b45f1.53cc88",
+        "type": "exec",
+        "z": "426451d9.00463",
+        "command": "wget https://hc-ping.com/",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Optional health check (dead man's switch)",
+        "x": 530,
+        "y": 220,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "cd2a13a.0b477f",
+        "type": "influxdb",
+        "z": "",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "sonoff",
+        "name": "sonoff-local",
+        "usetls": false,
+        "tls": ""
+    },
+    {
+        "id": "7fba0013.7a55e",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "mosquitto",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    }
+]
